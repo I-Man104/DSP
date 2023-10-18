@@ -35,7 +35,7 @@ def plot_signals(signal1):
     ax1.plot(signal1[0], signal1[1])
     ax1.set_title("Signal 1 (Continuous)")
 
-    ax2.stem(signal1[0], signal1[1], use_line_collection=True)
+    ax2.stem(signal1[0], signal1[1])
     ax2.set_title("Signal 1 (Discrete)")
 
     plt.tight_layout()
