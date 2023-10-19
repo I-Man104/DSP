@@ -1,4 +1,4 @@
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, ttk
 import tkinter as tk
 from signal_processing import load_signal, generate_signal, plot_signals
 
@@ -13,8 +13,6 @@ def on_open_file():
     plot_signals((data[:, 0], data[:, 1]))
 
 def on_generate():
-    global var_signal_type
-
     signal_type = var_signal_type.get()
     amplitude = float(entry_amplitude.get())
     phase_shift = float(entry_phase_shift.get())
@@ -34,16 +32,25 @@ def on_generate():
     plot_signals((time, signal1))
 
 def create_interface(root):
-    global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency  # Add this line
+    global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency
 
     root.geometry("400x400")
     root.title("Signal Processing Framework")
     frame = tk.Frame(root)
     frame.pack(pady=20)
+
     # Create open button
     btn_open = tk.Button(root, text="Open Signal", command=on_open_file)
     btn_open.pack(pady=10)
 
+    # Add items to the Signal Generation menu
+    var_signal_type = tk.StringVar()
+    var_signal_type.set("Sine Wave")  # Default signal type
+    
+    # Create a combo box for signal type selection
+    combo_signal_type = ttk.Combobox(root, textvariable=var_signal_type, values=["Sine Wave", "Cosine Wave"], state="readonly")
+    combo_signal_type.pack()
+    
     # Create labels and entry fields for signal parameters
     label_amplitude = tk.Label(root, text="Amplitude:")
     label_amplitude.pack()
@@ -72,14 +79,3 @@ def create_interface(root):
     # Create a menu bar
     menu_bar = tk.Menu(root)
     root.config(menu=menu_bar)
-
-    # Create the Signal Generation menu
-    signal_generation_menu = tk.Menu(menu_bar, tearoff=0)
-    menu_bar.add_cascade(label="Signal Generation", menu=signal_generation_menu)
-
-    # Add items to the Signal Generation menu
-    var_signal_type = tk.StringVar()
-    var_signal_type.set("Sine Wave")  #Default signal type
-
-    signal_generation_menu.add_radiobutton(label="Sine Wave", variable=var_signal_type, value="Sine Wave")
-    signal_generation_menu.add_radiobutton(label="Cosine Wave", variable=var_signal_type, value="Cosine Wave")
