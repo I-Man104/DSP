@@ -13,6 +13,7 @@ def load_signal(file_path):
     return np.array(data)
 
 def generate_signal(signal_type, amplitude, phase_shift, analog_frequency, sampling_frequency):
+    indecies = np.arange(1, sampling_frequency+1) 
     time = np.arange(sampling_frequency) / sampling_frequency
     omega = 2 * np.pi * analog_frequency
     if signal_type == "Sine Wave":
@@ -25,7 +26,7 @@ def generate_signal(signal_type, amplitude, phase_shift, analog_frequency, sampl
         messagebox.showerror("Error", "Invalid signal type selected!")
         return
 
-    return time, signal
+    return indecies, signal
 
 def plot_signals(signal1):
     import matplotlib.pyplot as plt
