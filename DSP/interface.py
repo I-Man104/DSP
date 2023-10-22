@@ -13,7 +13,7 @@ def on_open_file():
     for file_path in file_paths:
         data = load_signal(file_path)
         data_sets.append((data[:, 0], data[:, 1]))
-    plot_signals(data_sets)
+    return data_sets
 
 def on_generate():
     signal_type = var_signal_type.get()
