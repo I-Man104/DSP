@@ -28,16 +28,19 @@ def generate_signal(signal_type, amplitude, phase_shift, analog_frequency, sampl
 
     return indecies, signal
 
-def plot_signals(signal1):
+def plot_signals(data_sets):
     import matplotlib.pyplot as plt
-    
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
+    for i, data_set in enumerate(data_sets):
+        plt.figure(i+1)  # Create a new figure for each signal
+        
+        plt.subplot(2, 1, 2)  # Plot the continuous signal
+        plt.plot(data_set[0], data_set[1])
+        plt.title('Continuous Signal')
 
-    ax1.plot(signal1[0], signal1[1])
-    ax1.set_title("Signal 1 (Continuous)")
-
-    ax2.stem(signal1[0], signal1[1])
-    ax2.set_title("Signal 1 (Discrete)")
-
+        plt.subplot(2, 1, 1)  # Plot the discrete signal
+        plt.stem(data_set[0], data_set[1])
+        plt.title('Discrete Signal')
+        
     plt.tight_layout()
     plt.show()
+    

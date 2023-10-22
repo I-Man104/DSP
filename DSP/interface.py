@@ -5,12 +5,15 @@ from signal_processing import load_signal, generate_signal, plot_signals
 global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency
 
 def on_open_file():
-    file_path = filedialog.askopenfilename()
-    if not file_path:
+    file_paths = filedialog.askopenfilenames()
+    if not file_paths:
         return
 
-    data = load_signal(file_path)
-    plot_signals((data[:, 0], data[:, 1]))
+    data_sets = []
+    for file_path in file_paths:
+        data = load_signal(file_path)
+        data_sets.append((data[:, 0], data[:, 1]))
+    plot_signals(data_sets)
 
 def on_generate():
     signal_type = var_signal_type.get()
