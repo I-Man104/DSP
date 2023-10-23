@@ -13,6 +13,7 @@ def on_open_file():
     for file_path in file_paths:
         data = load_signal(file_path)
         data_sets.append((data[:, 0], data[:, 1]))
+    plot_signals(data_sets)
     return data_sets
 
 def on_generate():
@@ -33,11 +34,70 @@ def on_generate():
     time, signal1 = generate_signal(signal_type, amplitude, phase_shift, analog_frequency, sampling_frequency)
     
     plot_signals((time, signal1))
+    
+
+def open_addition_window():
+    addition_window = tk.Toplevel()
+    addition_window.title("Addition")
+
+def open_subtraction_window():
+    subtraction_window = tk.Toplevel()
+    subtraction_window.title("Subtraction")
+
+def open_squaring_window():
+    squaring_window = tk.Toplevel()
+    squaring_window.title("Squaring")
+    
+def open_accumulation_window():
+    accumulation_window = tk.Toplevel()
+    accumulation_window.title("Accumulation")
+
+# EDIT THESE ONLY #######################################
+def open_multiplication_window():
+    multiplication_window = tk.Toplevel()
+    multiplication_window.title("Multiplication")
+
+def open_shifting_window():
+    shifting_window = tk.Toplevel()
+    shifting_window.title("Shifting")
+
+def open_normalization_window():
+    normalization_window = tk.Toplevel()
+    normalization_window.title("Normalization")
+##########################################################
+
+def open_arithmetic_window(root):
+    arithmetic_window = tk.Toplevel(root)
+    arithmetic_window.title("Arithmetic Operations")
+    arithmetic_window.geometry("400x450")
+    # Create separate buttons for each arithmetic operation
+
+    btn_addition = tk.Button(arithmetic_window, text="Addition", command=open_addition_window)
+    btn_addition.pack(pady=10)
+
+    btn_subtraction = tk.Button(arithmetic_window, text="Subtraction", command=open_subtraction_window)
+    btn_subtraction.pack(pady=10)
+
+    btn_multiplication = tk.Button(arithmetic_window, text="Multiplication", command=open_multiplication_window)
+    btn_multiplication.pack(pady=10)
+
+    btn_squaring = tk.Button(arithmetic_window, text="Squaring", command=open_squaring_window)
+    btn_squaring.pack(pady=10)
+
+    btn_shifting = tk.Button(arithmetic_window, text="Shifting", command=open_shifting_window)
+    btn_shifting.pack(pady=10)
+
+    btn_normalization = tk.Button(arithmetic_window, text="Normalization", command=open_normalization_window)
+    btn_normalization.pack(pady=10)
+
+    btn_accumulation = tk.Button(arithmetic_window, text="Accumulation", command=open_accumulation_window)
+    btn_accumulation.pack(pady=10)
+
 
 def create_interface(root):
     global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency
 
-    root.geometry("400x400")
+    root.geometry("400x450")
     root.title("Signal Processing Framework")
     frame = tk.Frame(root)
     frame.pack(pady=20)
@@ -82,3 +142,7 @@ def create_interface(root):
     # Create a menu bar
     menu_bar = tk.Menu(root)
     root.config(menu=menu_bar)
+    
+    # Add the Arithmetic Operations button that opens a new window
+    btn_arithmetic = tk.Button(root, text="Arithmetic Operations", command=lambda: open_arithmetic_window(root))
+    btn_arithmetic.pack(pady=20)
