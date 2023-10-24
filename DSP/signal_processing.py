@@ -1,5 +1,5 @@
 import numpy as np
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
 from comparesignals import SignalSamplesAreEqual
 
 def load_signal(file_path):
@@ -11,6 +11,19 @@ def load_signal(file_path):
                 values = line.strip().split()
                 data.append([float(value) for value in values])
     return np.array(data)
+
+def get_datasets():
+    file_paths = filedialog.askopenfilenames()
+    if not file_paths:
+        return
+
+    data_sets = []
+    for file_path in file_paths:
+        data = load_signal(file_path)
+        x_values = data[:, 0]
+        y_values = data[:, 1]
+        data_sets.append((x_values, y_values))
+    return data_sets
 
 def generate_signal(signal_type, amplitude, phase_shift, analog_frequency, sampling_frequency):
     indecies = np.arange(1, sampling_frequency+1) 

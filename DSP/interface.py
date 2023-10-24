@@ -1,20 +1,12 @@
 from tkinter import filedialog, messagebox, ttk
 import tkinter as tk
-from signal_processing import load_signal, generate_signal, plot_signals
-
+from signal_processing import get_datasets, generate_signal, plot_signals
+from arithmetic_operations import addition, subtraction, multiplication, squaring, shifting, normalization, accumulation
 global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency
 
 def on_open_file():
-    file_paths = filedialog.askopenfilenames()
-    if not file_paths:
-        return
-
-    data_sets = []
-    for file_path in file_paths:
-        data = load_signal(file_path)
-        data_sets.append((data[:, 0], data[:, 1]))
+    data_sets = get_datasets()
     plot_signals(data_sets)
-    return data_sets
 
 def on_generate():
     signal_type = var_signal_type.get()
@@ -36,63 +28,65 @@ def on_generate():
     plot_signals((time, signal1))
     
 
-def open_addition_window():
-    addition_window = tk.Toplevel()
-    addition_window.title("Addition")
-
-def open_subtraction_window():
-    subtraction_window = tk.Toplevel()
-    subtraction_window.title("Subtraction")
-
-def open_squaring_window():
-    squaring_window = tk.Toplevel()
-    squaring_window.title("Squaring")
-    
-def open_accumulation_window():
-    accumulation_window = tk.Toplevel()
-    accumulation_window.title("Accumulation")
-
-# EDIT THESE ONLY #######################################
-def open_multiplication_window():
-    multiplication_window = tk.Toplevel()
-    multiplication_window.title("Multiplication")
-
-def open_shifting_window():
-    shifting_window = tk.Toplevel()
-    shifting_window.title("Shifting")
-
-def open_normalization_window():
-    normalization_window = tk.Toplevel()
-    normalization_window.title("Normalization")
-##########################################################
 
 def open_arithmetic_window(root):
     arithmetic_window = tk.Toplevel(root)
     arithmetic_window.title("Arithmetic Operations")
-    arithmetic_window.geometry("400x450")
-    # Create separate buttons for each arithmetic operation
-
-    btn_addition = tk.Button(arithmetic_window, text="Addition", command=open_addition_window)
-    btn_addition.pack(pady=10)
-
-    btn_subtraction = tk.Button(arithmetic_window, text="Subtraction", command=open_subtraction_window)
-    btn_subtraction.pack(pady=10)
-
-    btn_multiplication = tk.Button(arithmetic_window, text="Multiplication", command=open_multiplication_window)
-    btn_multiplication.pack(pady=10)
-
-    btn_squaring = tk.Button(arithmetic_window, text="Squaring", command=open_squaring_window)
-    btn_squaring.pack(pady=10)
-
-    btn_shifting = tk.Button(arithmetic_window, text="Shifting", command=open_shifting_window)
-    btn_shifting.pack(pady=10)
-
-    btn_normalization = tk.Button(arithmetic_window, text="Normalization", command=open_normalization_window)
-    btn_normalization.pack(pady=10)
-
-    btn_accumulation = tk.Button(arithmetic_window, text="Accumulation", command=open_accumulation_window)
-    btn_accumulation.pack(pady=10)
-
+    arithmetic_window.geometry("500x450")
+    
+    # Addition
+    frame_addition = tk.Frame(arithmetic_window)
+    frame_addition.pack(pady=10)
+    btn_addition = tk.Button(frame_addition, text="Addition", command=addition)
+    btn_addition.pack(side=tk.LEFT, padx=5)
+    
+    # Subtraction
+    frame_subtraction = tk.Frame(arithmetic_window)
+    frame_subtraction.pack(pady=10)
+    btn_subtraction = tk.Button(frame_subtraction, text="Subtraction", command=subtraction)
+    btn_subtraction.pack(side=tk.LEFT, padx=5)
+    
+    # Multiplication
+    frame_multiplication = tk.Frame(arithmetic_window)
+    frame_multiplication.pack(pady=10)
+    btn_multiplication = tk.Button(frame_multiplication, text="Multiply", command=multiplication)
+    btn_multiplication.pack(side=tk.LEFT, padx=5)
+    label_multiplication_factor = tk.Label(frame_multiplication, text="Factor:")
+    label_multiplication_factor.pack(side=tk.LEFT, padx=5)
+    entry_multiplication_factor = tk.Entry(frame_multiplication)
+    entry_multiplication_factor.pack(side=tk.LEFT, padx=5)
+    
+    # Squaring
+    frame_squaring = tk.Frame(arithmetic_window)
+    frame_squaring.pack(pady=10)
+    btn_squaring = tk.Button(frame_squaring, text="Squaring", command=squaring)
+    btn_squaring.pack(side=tk.LEFT, padx=5)
+    
+    # Shifting
+    frame_shifting = tk.Frame(arithmetic_window)
+    frame_shifting.pack(pady=10)
+    btn_shifting = tk.Button(frame_shifting, text="Shifting", command=shifting)
+    btn_shifting.pack(side=tk.LEFT, padx=5)
+    label_shift_factor = tk.Label(frame_shifting, text="Shift by:")
+    label_shift_factor.pack(side=tk.LEFT, padx=5)
+    entry_shift_factor = tk.Entry(frame_shifting)
+    entry_shift_factor.pack(side=tk.LEFT, padx=5)
+    
+    # Normalization
+    frame_normalization = tk.Frame(arithmetic_window)
+    frame_normalization.pack(pady=10)
+    btn_normalization = tk.Button(frame_normalization, text="Normalization", command=normalization)
+    btn_normalization.pack(side=tk.LEFT, padx=5)
+    normalization_options = ["0 to 1", "-1 to 1"]
+    combo_normalization_range = ttk.Combobox(frame_normalization, values=normalization_options, state="readonly")
+    combo_normalization_range.set(normalization_options[0])  # Setting default value to "0 to 1"
+    combo_normalization_range.pack(side=tk.LEFT, padx=5)
+    
+    # Accumulation
+    frame_accumulation = tk.Frame(arithmetic_window)
+    frame_accumulation.pack(pady=10)
+    btn_accumulation = tk.Button(frame_accumulation, text="Accumulation", command=accumulation)
+    btn_accumulation.pack(side=tk.LEFT, padx=5)
 
 def create_interface(root):
     global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency

@@ -1,115 +1,135 @@
-# def addition():
-#     file_path1 = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-#     if not file_path1:
-#         return
+from tkinter import filedialog
+from signal_processing import get_datasets, plot_signals
+from scipy.interpolate import interp1d
+import numpy as np
 
-#     file_path2 = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-#     if not file_path2:
-#         return
+def add_signals(signal1, signal2):
+    x_values1, y_values1 = signal1
+    x_values2, y_values2 = signal2
 
-#     first = read_file(file_path1)
-#     second = read_file(file_path2)
+    # Find the common range for x values
+    min_x = max(min(x_values1), min(x_values2))
+    max_x = min(max(x_values1), max(x_values2))
 
-#     max_len = max(len(first), len(second))
+    # Interpolate the shorter signal to match the length of the longer one
+    f1 = interp1d(x_values1, y_values1, kind='linear', fill_value=0, bounds_error=False)
+    f2 = interp1d(x_values2, y_values2, kind='linear', fill_value=0, bounds_error=False)
 
-#     # Append zeros to the shorter signal
-#     while len(first) < max_len:
-#         first.append((0, 0))
-#     while len(second) < max_len:
-#         second.append((0, 0))
+    x_values = np.linspace(min_x, max_x, num=max(len(x_values1), len(x_values2)), endpoint=True)
+    y_values_sum = f1(x_values) + f2(x_values)
 
-#     result_points = [(x, y1 + y2) for (x, y1), (_, y2) in zip(first, second)]
+    return (x_values, y_values_sum)
 
-# def subtraction():
-#     file_path1 = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-#     if not file_path1:
-#         return
-
-#     file_path2 = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-#     if not file_path2:
-#         return
-
-#     points1 = read_file(file_path1)
-#     points2 = read_file(file_path2)
-
-#     max_len = max(len(points1), len(points2))
-
-#     # Append zeros to the shorter signal
-#     while len(points1) < max_len:
-#         points1.append((0, 0))
-#     while len(points2) < max_len:
-#         points2.append((0, 0))
-
-#     result_points = [(x, y1 - y2) for (x, y1), (_, y2) in zip(points1, points2)]
-
+def addition():
+    datasets = get_datasets()
     
-# def multiplication():
-#     file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-#     if not file_path:
-#         return
+    if len(datasets) != 2:
+        print("Please select exactly two signals.")
+        return
 
-#     constant = simpledialog.askfloat("Multiplication", "Enter a constant value:")
-#     if constant is None:
-#         return
+    # Add the first two signals
+    sum_signal = add_signals(datasets[0], datasets[1])
+    
+    # Plot the original signals and the sum
+    plot_signals(datasets + [sum_signal])
 
-#     points = read_file(file_path)
+def subtract_signals(signal1, signal2):
+    x_values1, y_values1 = signal1
+    x_values2, y_values2 = signal2
 
-#     result_points = [(x, y * constant) for (x, y) in points]
+    # Find the common range for x values
+    min_x = max(min(x_values1), min(x_values2))
+    max_x = min(max(x_values1), max(x_values2))
 
-# def squaring():
-#     file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-#     if not file_path:
-#         return
+    # Interpolate the shorter signal to match the length of the longer one
+    f1 = interp1d(x_values1, y_values1, kind='linear', fill_value=0, bounds_error=False)
+    f2 = interp1d(x_values2, y_values2, kind='linear', fill_value=0, bounds_error=False)
 
-#     points = read_file(file_path)
+    x_values = np.linspace(min_x, max_x, num=max(len(x_values1), len(x_values2)), endpoint=True)
+    y_values_diff = f1(x_values) - f2(x_values)
 
-#     result_points = [(x, y ** 2) for (x, y) in points]
+    return (x_values, y_values_diff)
 
-# def shifting():
-#     file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-#     if not file_path:
-#         return
+def subtraction():
+    datasets = get_datasets()
 
-#     shift = simpledialog.askfloat("Shifting", "Enter a shift value:")
-#     if shift is None:
-#         return
+    if len(datasets) != 2:
+        print("Please select exactly two signals.")
+        return
 
-#     points = read_file(file_path)
+    # Subtract the first signal from the second signal
+    diff_signal = subtract_signals(datasets[1], datasets[0])  # Note the order of signals
 
-#     result_points = [(x + shift, y) for (x, y) in points]
+    # Plot the original signals and the difference
+    plot_signals(datasets + [diff_signal])
+    
+def multiplication():
+    file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
+    if not file_path:
+        return
 
-# def normalization():
-#     file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-#     if not file_path:
-#         return
+    constant = simpledialog.askfloat("Multiplication", "Enter a constant value:")
+    if constant is None:
+        return
 
-#     normalize_option = simpledialog.askstring("Normalization", "Choose normalization (0-1 or -1-1):")
-#     if normalize_option not in ("0-1", "-1-1"):
-#         print("Invalid normalization option.")
-#         return
+    points = read_file(file_path)
 
-#     points = read_file(file_path)
+    result_points = [(x, y * constant) for (x, y) in points]
 
-#     if normalize_option == "0-1":
-#         min_y = min(y for (_, y) in points)
-#         max_y = max(y for (_, y) in points)
-#         result_points = [(x, (y - min_y) / (max_y - min_y)) for (x, y) in points]
-#     else:  # -1-1 normalization
-#         min_y = min(y for (_, y) in points)
-#         max_y = max(y for (_, y) in points)
-#         max_abs_y = max(abs(y) for (_, y) in points)
-#         result_points = [(x, (2 * (y / max_abs_y) - 1)) for (x, y) in points]
+def squaring():
+    file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
+    if not file_path:
+        return
+
+    points = read_file(file_path)
+
+    result_points = [(x, y ** 2) for (x, y) in points]
+
+def shifting():
+    file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
+    if not file_path:
+        return
+
+    shift = simpledialog.askfloat("Shifting", "Enter a shift value:")
+    if shift is None:
+        return
+
+    points = read_file(file_path)
+
+    result_points = [(x + shift, y) for (x, y) in points]
+
+def normalization():
+    file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
+    if not file_path:
+        return
+
+    normalize_option = simpledialog.askstring("Normalization", "Choose normalization (0-1 or -1-1):")
+    if normalize_option not in ("0-1", "-1-1"):
+        print("Invalid normalization option.")
+        return
+
+    points = read_file(file_path)
+
+    if normalize_option == "0-1":
+        min_y = min(y for (_, y) in points)
+        max_y = max(y for (_, y) in points)
+        result_points = [(x, (y - min_y) / (max_y - min_y)) for (x, y) in points]
+    else:  # -1-1 normalization
+        min_y = min(y for (_, y) in points)
+        max_y = max(y for (_, y) in points)
+        max_abs_y = max(abs(y) for (_, y) in points)
+        result_points = [(x, (2 * (y / max_abs_y) - 1)) for (x, y) in points]
 
    
 
-# def accumulation():
-#     file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-#     if not file_path:
-#         return
+def accumulation():
+    file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
+    if not file_path:
+        return
 
-#     points = read_file(file_path)
+    points = read_file(file_path)
 
-#     accumulated_signal = [(x, 0) for x, _ in points]
+    accumulated_signal = [(x, 0) for x, _ in points]
 
-#     for i, (_, y) in enumerate(points):
-#         accumulated_signal[i] = (points[i][0], sum(y for _, y in points[:i+1]))
+    for i, (_, y) in enumerate(points):
+        accumulated_signal[i] = (points[i][0], sum(y for _, y in points[:i+1]))
