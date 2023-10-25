@@ -3,6 +3,8 @@ from signal_processing import get_datasets, plot_signals
 from scipy.interpolate import interp1d
 import numpy as np
 
+from task_2_test import AddSignalSamplesAreEqual, SubSignalSamplesAreEqual, MultiplySignalByConst, ShiftSignalByConst, NormalizeSignal, SignalSamplesAreEqual
+# Addition
 def add_signals(signal1, signal2):
     x_values1, y_values1 = signal1
     x_values2, y_values2 = signal2
@@ -30,9 +32,14 @@ def addition():
     # Add the first two signals
     sum_signal = add_signals(datasets[0], datasets[1])
     
+    # test Addition
+    # AddSignalSamplesAreEqual('Signal1.txt','Signal2.txt',sum_signal[0],sum_signal[1])
+    AddSignalSamplesAreEqual('Signal1.txt','Signal3.txt',sum_signal[0],sum_signal[1])
+    
     # Plot the original signals and the sum
     plot_signals(datasets + [sum_signal])
 
+# Subtraction
 def subtract_signals(signal1, signal2):
     x_values1, y_values1 = signal1
     x_values2, y_values2 = signal2
@@ -58,78 +65,115 @@ def subtraction():
         return
 
     # Subtract the first signal from the second signal
-    diff_signal = subtract_signals(datasets[1], datasets[0])  # Note the order of signals
+    diff_signal = subtract_signals(datasets[1], datasets[0])
+    
+    # test Subtraction
+    # SubSignalSamplesAreEqual('Signal1.txt','Signal2.txt',diff_signal[0],diff_signal[1])
+    SubSignalSamplesAreEqual('Signal1.txt','Signal3.txt',diff_signal[0],diff_signal[1])
 
     # Plot the original signals and the difference
     plot_signals(datasets + [diff_signal])
+
+# Multiplication
+def multiplication(factor):
+    datasets = get_datasets()
+
+    if len(datasets) != 1:
+        print("Please select exactly one signal.")
+        return
+
+    original_signal = datasets[0]
+    multiplied_signal = (original_signal[0], original_signal[1] * factor)
     
-def multiplication():
-    file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-    if not file_path:
-        return
+    # test Multiplication
+    MultiplySignalByConst(factor, multiplied_signal[0], multiplied_signal[1])
 
-    constant = simpledialog.askfloat("Multiplication", "Enter a constant value:")
-    if constant is None:
-        return
+    # Plot the original signal and the multiplied signal
+    plot_signals([original_signal, multiplied_signal])
 
-    points = read_file(file_path)
-
-    result_points = [(x, y * constant) for (x, y) in points]
-
+# Squaring
 def squaring():
-    file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-    if not file_path:
+    datasets = get_datasets()
+
+    if len(datasets) != 1:
+        print("Please select exactly one signal.")
         return
 
-    points = read_file(file_path)
+    original_signal = datasets[0]
+    squared_signal = (original_signal[0], [y ** 2 for y in original_signal[1]])
 
-    result_points = [(x, y ** 2) for (x, y) in points]
+    # test Squaring
+    SignalSamplesAreEqual('SQU', './test_cases/task2/output squaring signal 1.txt', squared_signal[0], squared_signal[1])
 
-def shifting():
-    file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-    if not file_path:
+    # Plot the original signal and the squared signal
+    plot_signals([original_signal, squared_signal])
+
+# Shifting
+def shifting(shift_value):
+    datasets = get_datasets()
+
+    if len(datasets) != 1:
+        print("Please select exactly one signal.")
         return
 
-    shift = simpledialog.askfloat("Shifting", "Enter a shift value:")
-    if shift is None:
+    original_signal = datasets[0]
+    shifted_signal = (original_signal[0] - shift_value, original_signal[1])
+
+    # test Shifting
+    ShiftSignalByConst(shift_value, shifted_signal[0], shifted_signal[1])
+
+    # Plot the original signal and the shifted signal
+    plot_signals([original_signal, shifted_signal])
+
+# Normalization
+def normalization(normalize_option):
+    MinRange = 0
+    MaxRange = 1
+    
+    datasets = get_datasets()
+
+    if len(datasets) != 1:
+        print("Please select exactly one signal.")
         return
 
-    points = read_file(file_path)
+    original_signal = datasets[0]
 
-    result_points = [(x + shift, y) for (x, y) in points]
+    if normalize_option == "0 to 1":
+        min_y = min(original_signal[1])
+        max_y = max(original_signal[1])
+        normalized_signal_y = [(y - min_y) / (max_y - min_y) for y in original_signal[1]]
 
-def normalization():
-    file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-    if not file_path:
-        return
-
-    normalize_option = simpledialog.askstring("Normalization", "Choose normalization (0-1 or -1-1):")
-    if normalize_option not in ("0-1", "-1-1"):
+    elif normalize_option == "-1 to 1":
+        MinRange = -1
+        max_abs_y = max(abs(y) for y in original_signal[1])
+        normalized_signal_y = [(2 * (y / max_abs_y) - 1) for y in original_signal[1]]
+    else:
         print("Invalid normalization option.")
         return
 
-    points = read_file(file_path)
+    normalized_signal = (original_signal[0], normalized_signal_y)
+    
+    # test normalization
+    NormalizeSignal(MinRange, MaxRange, normalized_signal[0], normalized_signal[1])
 
-    if normalize_option == "0-1":
-        min_y = min(y for (_, y) in points)
-        max_y = max(y for (_, y) in points)
-        result_points = [(x, (y - min_y) / (max_y - min_y)) for (x, y) in points]
-    else:  # -1-1 normalization
-        min_y = min(y for (_, y) in points)
-        max_y = max(y for (_, y) in points)
-        max_abs_y = max(abs(y) for (_, y) in points)
-        result_points = [(x, (2 * (y / max_abs_y) - 1)) for (x, y) in points]
-
-   
-
+    # Plot the original signal and the normalized signal
+    plot_signals([original_signal, normalized_signal])
+# Accumulation
 def accumulation():
-    file_path = filedialog.askopenfilename(filetypes=[('Text Files', '*.txt')])
-    if not file_path:
+    datasets = get_datasets()
+
+    if len(datasets) != 1:
+        print("Please select exactly one signal.")
         return
 
-    points = read_file(file_path)
+    original_signal = datasets[0]
 
-    accumulated_signal = [(x, 0) for x, _ in points]
+    accumulated_values = np.cumsum(original_signal[1])
+    accumulated_signal = (original_signal[0], accumulated_values)
 
-    for i, (_, y) in enumerate(points):
-        accumulated_signal[i] = (points[i][0], sum(y for _, y in points[:i+1]))
+    # test accumulation
+    SignalSamplesAreEqual('ACC', './test_cases/task2/output accumulation for signal1.txt', accumulated_signal[0], accumulated_signal[1])
+
+    # Plot the original signal and the accumulated signal
+    plot_signals([original_signal, accumulated_signal])
+    

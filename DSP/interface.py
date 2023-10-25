@@ -2,7 +2,7 @@ from tkinter import filedialog, messagebox, ttk
 import tkinter as tk
 from signal_processing import get_datasets, generate_signal, plot_signals
 from arithmetic_operations import addition, subtraction, multiplication, squaring, shifting, normalization, accumulation
-global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency
+global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency,entry_multiplication_factor,entry_shift_value,combo_normalization_range
 
 def on_open_file():
     data_sets = get_datasets()
@@ -26,8 +26,6 @@ def on_generate():
     time, signal1 = generate_signal(signal_type, amplitude, phase_shift, analog_frequency, sampling_frequency)
     
     plot_signals((time, signal1))
-    
-
 
 def open_arithmetic_window(root):
     arithmetic_window = tk.Toplevel(root)
@@ -45,17 +43,15 @@ def open_arithmetic_window(root):
     frame_subtraction.pack(pady=10)
     btn_subtraction = tk.Button(frame_subtraction, text="Subtraction", command=subtraction)
     btn_subtraction.pack(side=tk.LEFT, padx=5)
-    
+
     # Multiplication
     frame_multiplication = tk.Frame(arithmetic_window)
     frame_multiplication.pack(pady=10)
-    btn_multiplication = tk.Button(frame_multiplication, text="Multiply", command=multiplication)
-    btn_multiplication.pack(side=tk.LEFT, padx=5)
-    label_multiplication_factor = tk.Label(frame_multiplication, text="Factor:")
-    label_multiplication_factor.pack(side=tk.LEFT, padx=5)
     entry_multiplication_factor = tk.Entry(frame_multiplication)
     entry_multiplication_factor.pack(side=tk.LEFT, padx=5)
-    
+    btn_multiplication = tk.Button(frame_multiplication, text="Multiply", command=lambda: multiplication(float(entry_multiplication_factor.get())))
+    btn_multiplication.pack(side=tk.LEFT, padx=5)
+
     # Squaring
     frame_squaring = tk.Frame(arithmetic_window)
     frame_squaring.pack(pady=10)
@@ -65,23 +61,25 @@ def open_arithmetic_window(root):
     # Shifting
     frame_shifting = tk.Frame(arithmetic_window)
     frame_shifting.pack(pady=10)
-    btn_shifting = tk.Button(frame_shifting, text="Shifting", command=shifting)
-    btn_shifting.pack(side=tk.LEFT, padx=5)
+    btn_shift = tk.Button(frame_shifting, text="Shift", command=lambda: shifting(float(entry_shift_value.get())))
+    btn_shift.pack(side=tk.LEFT, padx=5)
+
+    frame_shifting.pack(pady=10)
     label_shift_factor = tk.Label(frame_shifting, text="Shift by:")
     label_shift_factor.pack(side=tk.LEFT, padx=5)
-    entry_shift_factor = tk.Entry(frame_shifting)
-    entry_shift_factor.pack(side=tk.LEFT, padx=5)
-    
+    entry_shift_value = tk.Entry(frame_shifting)
+    entry_shift_value.pack(side=tk.LEFT, padx=5)
+
     # Normalization
     frame_normalization = tk.Frame(arithmetic_window)
     frame_normalization.pack(pady=10)
-    btn_normalization = tk.Button(frame_normalization, text="Normalization", command=normalization)
+    btn_normalization = tk.Button(frame_normalization, text="Normalization", command=lambda: normalization(combo_normalization_range.get()))
     btn_normalization.pack(side=tk.LEFT, padx=5)
     normalization_options = ["0 to 1", "-1 to 1"]
     combo_normalization_range = ttk.Combobox(frame_normalization, values=normalization_options, state="readonly")
     combo_normalization_range.set(normalization_options[0])  # Setting default value to "0 to 1"
     combo_normalization_range.pack(side=tk.LEFT, padx=5)
-    
+
     # Accumulation
     frame_accumulation = tk.Frame(arithmetic_window)
     frame_accumulation.pack(pady=10)
