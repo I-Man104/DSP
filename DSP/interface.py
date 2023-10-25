@@ -25,7 +25,7 @@ def on_generate():
     
     time, signal1 = generate_signal(signal_type, amplitude, phase_shift, analog_frequency, sampling_frequency)
     
-    plot_signals((time, signal1))
+    plot_signals([(time, signal1)])
 
 def open_arithmetic_window(root):
     arithmetic_window = tk.Toplevel(root)
