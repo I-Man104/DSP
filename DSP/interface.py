@@ -1,7 +1,7 @@
-from tkinter import filedialog, messagebox, ttk
+from tkinter import messagebox, ttk
 import tkinter as tk
 from signal_processing import get_datasets, generate_signal, plot_signals
-from arithmetic_operations import addition, subtraction, multiplication, squaring, shifting, normalization, accumulation
+from arithmetic_operations import addition, subtraction, multiplication, squaring, shifting, normalization, accumulation, quantization_signal, quantization_signal_tst
 global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency,entry_multiplication_factor,entry_shift_value,combo_normalization_range
 
 def on_open_file():
@@ -85,11 +85,36 @@ def open_arithmetic_window(root):
     frame_accumulation.pack(pady=10)
     btn_accumulation = tk.Button(frame_accumulation, text="Accumulation", command=accumulation)
     btn_accumulation.pack(side=tk.LEFT, padx=5)
-
+    
+def open_Quantize_window(root):
+    Quantize_window = tk.Toplevel(root)
+    Quantize_window.title("Quantize Operations")
+    Quantize_window.geometry("400x250")
+    
+    # Create labels and entry field
+    label_bits_levels_number = tk.Label(Quantize_window, text="Number of (bits/levels):")
+    label_bits_levels_number.pack()
+    entry_bits_levels_number = tk.Entry(Quantize_window)
+    entry_bits_levels_number.pack()
+    
+    # Type selection
+    type_var = tk.StringVar()
+    bits_option = ttk.Radiobutton(Quantize_window, text="Bits", variable=type_var, value="bits")
+    bits_option.pack()
+    levels_option = ttk.Radiobutton(Quantize_window, text="Levels", variable=type_var, value="levels")
+    levels_option.pack()
+    
+    # test1 button
+    btn_test_1 = tk.Button(Quantize_window, text="test1", command=lambda: quantization_signal_tst(entry_bits_levels_number, type_var))
+    btn_test_1.pack(pady=10)
+    # test2 button
+    btn_test_2 = tk.Button(Quantize_window, text="test2", command=lambda: quantization_signal_tst(entry_bits_levels_number, type_var))
+    btn_test_2.pack(pady=10)
+    
 def create_interface(root):
     global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency
 
-    root.geometry("400x450")
+    root.geometry("400x550")
     root.title("Signal Processing Framework")
     frame = tk.Frame(root)
     frame.pack(pady=20)
@@ -137,4 +162,8 @@ def create_interface(root):
     
     # Add the Arithmetic Operations button that opens a new window
     btn_arithmetic = tk.Button(root, text="Arithmetic Operations", command=lambda: open_arithmetic_window(root))
+    btn_arithmetic.pack(pady=20)
+    
+    # Add the Quantize Operations button that opens a new window
+    btn_arithmetic = tk.Button(root, text="Quantization", command=lambda: open_Quantize_window(root))
     btn_arithmetic.pack(pady=20)

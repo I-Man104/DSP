@@ -16,7 +16,9 @@ def get_datasets():
     file_paths = filedialog.askopenfilenames()
     if not file_paths:
         return
-
+    if len(file_paths) == 1:
+        data = load_signal(file_paths[0])
+        return [data[:, 0], data[:, 1]]
     data_sets = []
     for file_path in file_paths:
         data = load_signal(file_path)
