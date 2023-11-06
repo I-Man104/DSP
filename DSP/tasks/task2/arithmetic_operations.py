@@ -2,9 +2,8 @@ from tkinter import messagebox, filedialog
 from signal_processing import get_datasets, plot_signals
 from scipy.interpolate import interp1d
 import numpy as np
-import math
 from tests.task_2_test import AddSignalSamplesAreEqual, SubSignalSamplesAreEqual, MultiplySignalByConst, ShiftSignalByConst, NormalizeSignal, SignalSamplesAreEqual
-from tests.task_3_test import QuantizationTest1, QuantizationTest2
+
 # Addition
 def add_signals(signal1, signal2):
     x_values1, y_values1 = signal1
@@ -79,11 +78,7 @@ def subtraction():
 def multiplication(factor):
     datasets = get_datasets()
 
-    if len(datasets) != 1:
-        print("Please select exactly one signal.")
-        return
-
-    original_signal = datasets[0]
+    original_signal = datasets
     multiplied_signal = (original_signal[0], original_signal[1] * factor)
     
     # test Multiplication
@@ -100,7 +95,7 @@ def squaring():
         print("Please select exactly one signal.")
         return
 
-    original_signal = datasets[0]
+    original_signal = datasets
     squared_signal = (original_signal[0], [y ** 2 for y in original_signal[1]])
 
     # test Squaring
@@ -113,11 +108,7 @@ def squaring():
 def shifting(shift_value):
     datasets = get_datasets()
 
-    if len(datasets) != 1:
-        print("Please select exactly one signal.")
-        return
-
-    original_signal = datasets[0]
+    original_signal = datasets
     shifted_signal = (original_signal[0] - shift_value, original_signal[1])
 
     # test Shifting
@@ -133,11 +124,7 @@ def normalization(normalize_option):
     
     datasets = get_datasets()
 
-    if len(datasets) != 1:
-        print("Please select exactly one signal.")
-        return
-
-    original_signal = datasets[0]
+    original_signal = datasets
 
     if normalize_option == "0 to 1":
         min_y = min(original_signal[1])
@@ -163,11 +150,7 @@ def normalization(normalize_option):
 def accumulation():
     datasets = get_datasets()
 
-    if len(datasets) != 1:
-        print("Please select exactly one signal.")
-        return
-
-    original_signal = datasets[0]
+    original_signal = datasets
 
     accumulated_values = np.cumsum(original_signal[1])
     accumulated_signal = (original_signal[0], accumulated_values)
@@ -178,46 +161,3 @@ def accumulation():
     # Plot the original signal and the accumulated signal
     plot_signals([original_signal, accumulated_signal])
     
-    
-def quantization_signal(signal,lvls):
-    sig_min = min(signal)
-    sig_max = max(signal)
-    sig_delta = round((sig_max - sig_min)/lvls,3)
-    ranges = []
-    mid_points=[]
-    interval_index=[]
-    xQs=[]
-    binary_rep=[]
-    error = []
-    num_bits = int(math.log(lvls,2))
-    x= sig_min
-    for i in range(lvls):
-        ranges.append((x,x+sig_delta))
-        x = x +sig_delta
-    
-    ranges = [(round(a,3), round(b, 3)) for a, b in ranges]
-    for start, end in ranges:
-        mid_points.append(round((start + end)/2,3))
-    y=0
-    
-    for i,(point) in enumerate(signal):
-        for index,(start, end) in enumerate(ranges):
-            if point >= start and point <= end:
-                xQs.append(mid_points[index])
-                interval_index.append(index+1)
-                y = index
-                break
-        binary_rep.append(format(y, f'0{num_bits}b'))
-        error.append(round(xQs[i]-point,3))
-    return binary_rep,error,xQs,interval_index
-
-def quantization_signal_tst(qunt_entry,v):
-    lvls = int(qunt_entry.get())
-    if v.get() == "bits":
-        lvls = pow(2,int(qunt_entry.get()))    
-    indices,signals=get_datasets()
-    binary_rep,error,xQs,interval_index = quantization_signal(signals,lvls)
-    if v.get() == "bits":
-        QuantizationTest1("./test_cases/task3/Quan1_Out.txt",binary_rep,xQs)
-    elif v.get() == "levels":
-        QuantizationTest2("./test_cases/task3/Quan2_Out.txt",interval_index,binary_rep,xQs,error)
