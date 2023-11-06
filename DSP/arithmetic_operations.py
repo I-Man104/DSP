@@ -3,9 +3,8 @@ from signal_processing import get_datasets, plot_signals
 from scipy.interpolate import interp1d
 import numpy as np
 import math
-
-from task_2_test import AddSignalSamplesAreEqual, SubSignalSamplesAreEqual, MultiplySignalByConst, ShiftSignalByConst, NormalizeSignal, SignalSamplesAreEqual
-from task_3_test import QuantizationTest1, QuantizationTest2
+from tests.task_2_test import AddSignalSamplesAreEqual, SubSignalSamplesAreEqual, MultiplySignalByConst, ShiftSignalByConst, NormalizeSignal, SignalSamplesAreEqual
+from tests.task_3_test import QuantizationTest1, QuantizationTest2
 # Addition
 def add_signals(signal1, signal2):
     x_values1, y_values1 = signal1

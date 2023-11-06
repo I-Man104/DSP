@@ -1,6 +1,6 @@
 import numpy as np
 from tkinter import messagebox, filedialog
-from comparesignals import SignalSamplesAreEqual
+from tests.comparesignals import SignalSamplesAreEqual
 
 def load_signal(file_path):
     with open(file_path, 'r') as file:
@@ -33,10 +33,10 @@ def generate_signal(signal_type, amplitude, phase_shift, analog_frequency, sampl
     omega = 2 * np.pi * analog_frequency
     if signal_type == "Sine Wave":
         signal = amplitude * np.sin(omega * time + phase_shift)
-        SignalSamplesAreEqual('./test_cases/SinOutput.txt', time, signal)
+        SignalSamplesAreEqual('./test_cases/task1/SinOutput.txt', time, signal)
     elif signal_type == "Cosine Wave":
         signal = amplitude * np.cos(omega * time + phase_shift)
-        SignalSamplesAreEqual('./test_cases/CosOutput.txt', time, signal)
+        SignalSamplesAreEqual('./test_cases/task1/CosOutput.txt', time, signal)
     else:
         messagebox.showerror("Error", "Invalid signal type selected!")
         return
