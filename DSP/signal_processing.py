@@ -4,28 +4,46 @@ from tests.comparesignals import SignalSamplesAreEqual
 
 def load_signal(file_path):
     with open(file_path, 'r') as file:
+        print("File selected:", file_path)
+        # the domain is a time domain by default
+        domain = 'time'
+        iteration = 0
         lines = file.readlines()
         data = []
         for line in lines:
-            if line.__contains__(' '):
-                values = line.strip().split()
+            # check second row
+            if iteration == 1 and float(line) == 1:
+                domain = 'frequency'
+            
+            # check the signal
+            elif iteration > 2:
+                values = []
+                if domain == 'time':
+                    values = line.strip().split()
+                elif domain == 'frequency':
+                    if line.__contains__(' '):
+                        values = line.strip().replace('f', '').split(' ')
+                    elif line.__contains__(','):
+                        values = line.strip().replace('f', '').split(',')
                 data.append([float(value) for value in values])
-    return np.array(data)
+            iteration = iteration + 1
+    
+    return np.array(data), domain
 
 def get_datasets():
     file_paths = filedialog.askopenfilenames()
     if not file_paths:
         return
     if len(file_paths) == 1:
-        data = load_signal(file_paths[0])
-        return [data[:, 0], data[:, 1]]
+        data, domain = load_signal(file_paths[0])
+        return [data[:, 0], data[:, 1]],domain
     data_sets = []
     for file_path in file_paths:
-        data = load_signal(file_path)
+        data, domain = load_signal(file_path)
         x_values = data[:, 0]
         y_values = data[:, 1]
         data_sets.append((x_values, y_values))
-    return data_sets
+    return data_sets, domain
 
 def generate_signal(signal_type, amplitude, phase_shift, analog_frequency, sampling_frequency):
     indecies = np.arange(1, sampling_frequency+1) 
