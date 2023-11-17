@@ -1,6 +1,7 @@
 import numpy as np
 from signal_processing import get_datasets
 from tests.comparesignals import SignalSamplesAreEqual
+
 def plot_freq(x, y, x_lable, y_lable, fig, canv, flg=False):
     fig.clear()
     fig.supxlabel(x_lable)
@@ -48,8 +49,20 @@ def compute_dct(m_first_coefficients, figures, canvass):
         Yk.append(Y_current)
 
     SignalSamplesAreEqual("./test_cases (output)/task5/DCT_output.txt", indecies, Yk)
-    plot_freq(indecies, Yk, "indecies", "samples", figures[0], canvass[0])
+    plot_freq(indecies, Yk, "indecies", "samples", figures[0], canvass[0], True)
     write_file(indecies[:m_first_coefficients], samples[:m_first_coefficients])
     
 def remove_dc_component():
-  pass
+    indecies = []
+    samples = []
+    data, domain = get_datasets()
+    indecies[:] = data[0]
+    samples[:] = data[1]
+
+    mean_sample=np.mean(samples)
+    N=len(samples)
+    after_remove=[]
+    for k in range(N):
+        after_remove.append(samples[k]-mean_sample)
+
+    SignalSamplesAreEqual("./test_cases (output)/task5/DC_component_output.txt", indecies, after_remove)
