@@ -5,6 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tasks.task2.arithmetic_operations import addition, subtraction, multiplication, squaring, shifting, normalization, accumulation
 from tasks.task3.quantization import quantization_signal_tst
 from tasks.task4.DFT_IDFT import change_time_sig, apply_dft, apply_idft, apply_comp, mod_sig
+from tasks.task5.DCT import compute_dct, remove_dc_component
 global entry_multiplication_factor,entry_shift_value,combo_normalization_range
 
 def open_arithmetic_window(root):
@@ -95,7 +96,7 @@ def open_IDF_IDFT_window(root):
     # initializing the window
     IDF_IDFT_window = tk.Toplevel(root)
     IDF_IDFT_window.title("IDF_IDFT Operations")
-    IDF_IDFT_window.geometry("1000x500")
+    IDF_IDFT_window.geometry("1000x530")
     
     # frequency entry
     freq_lable = ttk.Label(IDF_IDFT_window, text="Frequency :", font=15)
@@ -142,3 +143,14 @@ def open_IDF_IDFT_window(root):
                         ,command=lambda: mod_sig(mod_amp_entry,mod_phase_entry,mod_idx_entry,x,tORf_sig,freq_entry,figures,canvass))
     apply_mod.grid(row=6, column=2,sticky='w')
     
+    # Text field for DCT result
+    dct_result_entry = tk.Entry(IDF_IDFT_window)
+    dct_result_entry.grid(row=8, column=1, pady=10)
+    
+    # Add "Compute DCT" button and text field in the same row
+    compute_dct_button = tk.Button(IDF_IDFT_window, text="Compute DCT", command=lambda: compute_dct(int(dct_result_entry.get()), figures, canvass))
+    compute_dct_button.grid(row=8, column=0, pady=10)
+    
+    # Add "Remove DC component" button
+    remove_dc_button = tk.Button(IDF_IDFT_window, text="Remove DC component", command=lambda: remove_dc_component())
+    remove_dc_button.grid(row=10, column=0, columnspan=3, pady=10)

@@ -4,37 +4,35 @@ import math
 from tests.task_4_test import SignalComapreAmplitude, SignalComaprePhaseShift
 
 def generate_omega(freq,N):
-  omg=2*np.pi*freq/N
-  omegas=[]
-  for i in range(N):
-    omegas.append(omg*(i+1))
-  return omegas
-
+    omg=2*np.pi*freq/N
+    omegas=[]
+    for i in range(N):
+        omegas.append(omg*(i+1))
+    return omegas
 
 def plot_freq(x,y,ylable,fig,canv,flg=False):
-  fig.clear()
-  fig.supxlabel("Fundamental Frequency")
-  fig.supylabel(ylable)
-  ax=fig.add_subplot(111)
-  if flg:
-    fig.supxlabel("Time")
-    ax.plot(x,y)
-  else:
-    ax.stem(x, y)
-  canv.draw()
+    fig.clear()
+    fig.supxlabel("Fundamental Frequency")
+    fig.supylabel(ylable)
+    ax=fig.add_subplot(111)
+    if flg:
+        fig.supxlabel("Time")
+        ax.plot(x,y)
+    else:
+        ax.stem(x, y)
+    canv.draw()
 
-# check if it's time signal or frequency signal
 def change_time_sig(x, tORf_sig, figures, canvass):
-  data_set,domain=get_datasets()
-  x[:] = data_set[0]
-  tORf_sig[:] = data_set[1]
-  if domain == 'time':
-    plot_freq(np.arange(len(tORf_sig)),tORf_sig,"Amplitude",figures[0],canvass[0],True)
-  else:
-    omega=generate_omega(4,len(tORf_sig))
-    plot_freq(omega,x,"Amplitude",figures[1],canvass[1])
-    plot_freq(omega,tORf_sig,"Phase Shift",figures[2],canvass[2])
-  return x, tORf_sig
+    data_set,domain=get_datasets()
+    x[:] = data_set[0]
+    tORf_sig[:] = data_set[1]
+    if domain == 'time':
+        plot_freq(np.arange(len(tORf_sig)),tORf_sig,"Amplitude",figures[0],canvass[0],True)
+    else:
+        omega=generate_omega(4,len(tORf_sig))
+        plot_freq(omega,x,"Amplitude",figures[1],canvass[1])
+        plot_freq(omega,tORf_sig,"Phase Shift",figures[2],canvass[2])
+    return x, tORf_sig
 
 def DFT(sig):
     A=[]
@@ -66,7 +64,6 @@ def IDFT(amp,phase):
         xN[i]+=np.sum(xknew*np.exp(2j*np.pi*i*n/N))/N
     write_file(False,np.round(xN.real,0))
     return xN.real
-
 
 def apply_dft(sig,freq_entry,figures,canvass):
     amp,phase_shift,sample_num=DFT(sig)
