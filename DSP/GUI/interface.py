@@ -1,11 +1,11 @@
 from tkinter import messagebox, ttk
 import tkinter as tk
-from GUI.windows import open_arithmetic_window, open_Quantize_window, open_IDF_IDFT_window
+from GUI.windows import open_arithmetic_window, open_Quantize_window, open_IDF_IDFT_window, open_Time_Domain_window
 from tasks.task1.generate_signals import on_open_file, on_generate
 def create_interface(root):
     global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency
 
-    root.geometry("400x600")
+    root.geometry("400x650")
     root.title("Signal Processing Framework")
     frame = tk.Frame(root)
     frame.pack(pady=20)
@@ -53,12 +53,16 @@ def create_interface(root):
     
     # Add the Arithmetic Operations button that opens a new window
     btn_arithmetic = tk.Button(root, text="Arithmetic Operations", command=lambda: open_arithmetic_window(root))
-    btn_arithmetic.pack(pady=20)
+    btn_arithmetic.pack()
     
     # Add the Quantize Operations button that opens a new window
-    btn_arithmetic = tk.Button(root, text="Quantization", command=lambda: open_Quantize_window(root))
-    btn_arithmetic.pack(pady=20)
+    btn_quantization = tk.Button(root, text="Quantization", command=lambda: open_Quantize_window(root))
+    btn_quantization.pack()
+    
+    # Add the Frequency Domain button that opens a new window
+    btn_frequency_domain = tk.Button(root, text="Frequency Domain", command=lambda: open_IDF_IDFT_window(root))
+    btn_frequency_domain.pack()
     
     # Add the IDF_IDFT button that opens a new window
-    btn_arithmetic = tk.Button(root, text="IDF_IDFT", command=lambda: open_IDF_IDFT_window(root))
-    btn_arithmetic.pack(pady=20)
+    btn_time_domain = tk.Button(root, text="Time Domain", command=lambda: open_Time_Domain_window(root))
+    btn_time_domain.pack()

@@ -106,7 +106,7 @@ def squaring():
 
 # Shifting
 def shifting(shift_value):
-    datasets = get_datasets()
+    datasets,domain = get_datasets()
 
     original_signal = datasets
     shifted_signal = (original_signal[0] - shift_value, original_signal[1])

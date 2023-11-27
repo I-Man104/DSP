@@ -6,7 +6,9 @@ from tasks.task2.arithmetic_operations import addition, subtraction, multiplicat
 from tasks.task3.quantization import quantization_signal_tst
 from tasks.task4.DFT_IDFT import change_time_sig, apply_dft, apply_idft, apply_comp, mod_sig
 from tasks.task5.DCT import compute_dct, remove_dc_component
-global entry_multiplication_factor,entry_shift_value,combo_normalization_range
+from tasks.task6.signal_manipulation import smoothing, folding, shift_and_fold, remove_dc_component_time_domain
+from tasks.task6.DerivativeSignal import DerivativeSignal
+global entry_multiplication_factor,entry_shift_value,combo_normalization_range, entry_shift_value_task6, entry_window_size
 
 def open_arithmetic_window(root):
     arithmetic_window = tk.Toplevel(root)
@@ -44,8 +46,6 @@ def open_arithmetic_window(root):
     frame_shifting.pack(pady=10)
     btn_shift = tk.Button(frame_shifting, text="Shift", command=lambda: shifting(float(entry_shift_value.get())))
     btn_shift.pack(side=tk.LEFT, padx=5)
-
-    frame_shifting.pack(pady=10)
     label_shift_factor = tk.Label(frame_shifting, text="Shift by:")
     label_shift_factor.pack(side=tk.LEFT, padx=5)
     entry_shift_value = tk.Entry(frame_shifting)
@@ -153,4 +153,56 @@ def open_IDF_IDFT_window(root):
     
     # Add "Remove DC component" button
     remove_dc_button = tk.Button(IDF_IDFT_window, text="Remove DC component", command=lambda: remove_dc_component())
+    remove_dc_button.grid(row=10, column=0, columnspan=3, pady=10)
+    
+def open_Time_Domain_window(root):
+    # initializing the window
+    Time_Domain_window = tk.Toplevel(root)
+    Time_Domain_window.title("Time Domain Operations")
+    Time_Domain_window.geometry("400x400")
+    
+    # Smoothing
+    frame_smoothing = tk.Frame(Time_Domain_window)
+    frame_smoothing.pack(pady=10)
+    entry_window_size = tk.Entry(frame_smoothing)
+    entry_window_size.pack(side=tk.LEFT, padx=5)
+    smoothing_btn = tk.Button(frame_smoothing, text="smoothing", command=lambda: smoothing(int(entry_window_size.get())))
+    smoothing_btn.pack(side=tk.LEFT, padx=5, pady=10)
+    
+    # Sharpening
+    frame_sharpening = tk.Frame(Time_Domain_window)
+    frame_sharpening.pack(pady=10)
+    sharpening_btn = tk.Button(frame_sharpening, text="Sharpening", command=DerivativeSignal)
+    sharpening_btn.pack()
+    
+    # Shifting
+    frame_shifting = tk.Frame(Time_Domain_window)
+    frame_shifting.pack(pady=10)
+    btn_shift = tk.Button(frame_shifting, text="Shift", command=lambda: shifting(float(entry_shift_value_task6.get())))
+    btn_shift.pack(side=tk.LEFT, padx=5)
+    label_shift_factor = tk.Label(frame_shifting, text="Shift by:")
+    label_shift_factor.pack(side=tk.LEFT, padx=5)
+    entry_shift_value_task6 = tk.Entry(frame_shifting)
+    entry_shift_value_task6.pack(side=tk.LEFT, padx=5)
+    
+    # Folding
+    frame_folding = tk.Frame(Time_Domain_window)
+    frame_folding.pack(pady=10)
+    btn_folding = tk.Button(frame_folding, text="Folding", command=folding)
+    btn_folding.pack(side=tk.LEFT, padx=5)
+    
+    # Shift and Fold
+    frame_shifting_folding = tk.Frame(Time_Domain_window)
+    frame_shifting_folding.pack(pady=10)
+    btn_shift = tk.Button(frame_shifting_folding, text="Shift and Fold", command=lambda: shift_and_fold(int(entry_shift_fold_value_task6.get())))
+    btn_shift.pack(side=tk.LEFT, padx=5)
+    label_shift_factor = tk.Label(frame_shifting_folding, text="Shift by:")
+    label_shift_factor.pack(side=tk.LEFT, padx=5)
+    entry_shift_fold_value_task6 = tk.Entry(frame_shifting_folding)
+    entry_shift_fold_value_task6.pack(side=tk.LEFT, padx=5)
+    
+    # Add "Remove DC component" button
+    frame_remove_dc = tk.Frame(Time_Domain_window)
+    frame_remove_dc.pack(pady=10)
+    remove_dc_button = tk.Button(frame_remove_dc, text="Remove DC component", command=lambda: remove_dc_component_time_domain())
     remove_dc_button.grid(row=10, column=0, columnspan=3, pady=10)
