@@ -8,6 +8,7 @@ from tasks.task4.DFT_IDFT import change_time_sig, apply_dft, apply_idft, apply_c
 from tasks.task5.DCT import compute_dct, remove_dc_component
 from tasks.task6.signal_manipulation import smoothing, folding, shift_and_fold, remove_dc_component_time_domain
 from tasks.task6.DerivativeSignal import DerivativeSignal
+from tasks.task7.convolution import convolution_time_domain
 global entry_multiplication_factor,entry_shift_value,combo_normalization_range, entry_shift_value_task6, entry_window_size
 
 def open_arithmetic_window(root):
@@ -159,7 +160,7 @@ def open_Time_Domain_window(root):
     # initializing the window
     Time_Domain_window = tk.Toplevel(root)
     Time_Domain_window.title("Time Domain Operations")
-    Time_Domain_window.geometry("400x400")
+    Time_Domain_window.geometry("400x450")
     
     # Smoothing
     frame_smoothing = tk.Frame(Time_Domain_window)
@@ -206,3 +207,9 @@ def open_Time_Domain_window(root):
     frame_remove_dc.pack(pady=10)
     remove_dc_button = tk.Button(frame_remove_dc, text="Remove DC component", command=lambda: remove_dc_component_time_domain())
     remove_dc_button.grid(row=10, column=0, columnspan=3, pady=10)
+    
+    # Add "Convolution" button
+    frame_convolution = tk.Frame(Time_Domain_window)
+    frame_convolution.pack(pady=10)
+    convolution_button = tk.Button(frame_convolution, text="Convolute", command=lambda: convolution_time_domain())
+    convolution_button.pack()
