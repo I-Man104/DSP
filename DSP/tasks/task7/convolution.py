@@ -2,8 +2,6 @@ from tests.conv_test import ConvTest
 from signal_processing import get_datasets
 import matplotlib.pyplot as plt
 
-        
-
 def plot_signal(x, y, title='Signal'):
     plt.figure()  # Create a new figure
 
@@ -29,6 +27,7 @@ def convolution_time_domain():
     sample_2[:] = datasets[1][1]
     
     result_indices, result_samples = convolve_signals(indecies_1,sample_1,indecies_2, sample_2)
+    
     ConvTest(result_indices, result_samples)
     print(result_indices, result_samples)
 
@@ -37,8 +36,8 @@ def convolution_time_domain():
 def convolve_signals(signal1_indices, signal1_samples, signal2_indices, signal2_samples):
     m = len(signal1_samples)
     n = len(signal2_samples)
-    result = [0] * (m + n - 1)  # Initialize the result array with zeros
-    result_indices = [0] * (m + n - 1)  # Initialize the result indices array
+    result = [0] * (m + n - 1)  
+    result_indices = [0] * (m + n - 1)  
 
     for i in range(m):
         for j in range(n):

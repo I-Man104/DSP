@@ -9,6 +9,7 @@ from tasks.task5.DCT import compute_dct, remove_dc_component
 from tasks.task6.signal_manipulation import smoothing, folding, shift_and_fold, remove_dc_component_time_domain
 from tasks.task6.DerivativeSignal import DerivativeSignal
 from tasks.task7.convolution import convolution_time_domain
+from tasks.task8.Correlation import normalizedCrossCorrelation
 global entry_multiplication_factor,entry_shift_value,combo_normalization_range, entry_shift_value_task6, entry_window_size
 
 def open_arithmetic_window(root):
@@ -213,3 +214,9 @@ def open_Time_Domain_window(root):
     frame_convolution.pack(pady=10)
     convolution_button = tk.Button(frame_convolution, text="Convolute", command=lambda: convolution_time_domain())
     convolution_button.pack()
+    
+    # Add "Correlation" button
+    frame_correlation = tk.Frame(Time_Domain_window)
+    frame_correlation.pack(pady=10)
+    correlation_button = tk.Button(frame_correlation, text="Correlation", command=lambda: normalizedCrossCorrelation())
+    correlation_button.pack()
