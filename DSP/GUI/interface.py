@@ -5,7 +5,7 @@ from tasks.task1.generate_signals import on_open_file, on_generate
 def create_interface(root):
     global var_signal_type, entry_amplitude, entry_phase_shift, entry_analog_frequency, entry_sampling_frequency
 
-    root.geometry("400x650")
+    root.geometry("400x550")
     root.title("Signal Processing Framework")
     frame = tk.Frame(root)
     frame.pack(pady=20)

@@ -10,6 +10,7 @@ from tasks.task6.signal_manipulation import smoothing, folding, shift_and_fold, 
 from tasks.task6.DerivativeSignal import DerivativeSignal
 from tasks.task7.convolution import convolution_time_domain
 from tasks.task8.Correlation import normalizedCrossCorrelation
+from tasks.task9.fast import fastConvolution, fastCorrelation
 global entry_multiplication_factor,entry_shift_value,combo_normalization_range, entry_shift_value_task6, entry_window_size
 
 def open_arithmetic_window(root):
@@ -161,7 +162,7 @@ def open_Time_Domain_window(root):
     # initializing the window
     Time_Domain_window = tk.Toplevel(root)
     Time_Domain_window.title("Time Domain Operations")
-    Time_Domain_window.geometry("400x450")
+    Time_Domain_window.geometry("400x600")
     
     # Smoothing
     frame_smoothing = tk.Frame(Time_Domain_window)
@@ -220,3 +221,15 @@ def open_Time_Domain_window(root):
     frame_correlation.pack(pady=10)
     correlation_button = tk.Button(frame_correlation, text="Correlation", command=lambda: normalizedCrossCorrelation())
     correlation_button.pack()
+    
+    # Add "Fast Convolution" button
+    frame_fast_Convolution = tk.Frame(Time_Domain_window)
+    frame_fast_Convolution.pack(pady=10)
+    fast_Convolution_button = tk.Button(frame_fast_Convolution, text="Fast Convolution", command=lambda: fastConvolution())
+    fast_Convolution_button.pack()
+    
+    # Add "Fast Correlation" button
+    frame_fast_correlation = tk.Frame(Time_Domain_window)
+    frame_fast_correlation.pack(pady=10)
+    fast_correlation_button = tk.Button(frame_fast_correlation, text="Fast Correlation", command=lambda: fastCorrelation())
+    fast_correlation_button.pack()
